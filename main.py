@@ -7,6 +7,8 @@
 # Source of Data - Kaggle
 # Netflix Data = https://www.kaggle.com/shivamb/netflix-shows
 # Amazon Prime Video Data = https://www.kaggle.com/shivamb/amazon-prime-movies-and-tv-shows
+# OMDB API Data = http://www.omdbapi.com/
+# PIMA India Diabetes Dataset = https://www.kaggle.com/uciml/pima-indians-diabetes-database
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -100,3 +102,4 @@ for i in movie_list:
 result_counts = count_entries('./data/netflix_titles.csv', 10, 'release_year')
 print(result_counts)
 """
+
