@@ -13,6 +13,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import requests
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+pd.set_option('display.max_rows', 10)
+pd.set_option('display.max_columns', 10)
 
 def create_dateframe(file):
     """This function creates Pandas DataFrame"""
@@ -52,6 +57,12 @@ def count_entries(file_name, chunk_size, colname):
             else:
                 counts_dict[entry] = 1
     return counts_dict
+
+def plot_corr(df):
+    """Function to plot correlation matrix"""
+    corr = df.corr()
+    sns.heatmap(corr, annot=True, cmap='viridis', linewidths=.1)
+    plt.show()
 
  #Code to demenstorate loading data from csv file
 df_netflix = create_dateframe('/home/mukul/PycharmProjects/UCDAssement/data/netflix_titles.csv')
@@ -102,4 +113,60 @@ for i in movie_list:
 result_counts = count_entries('./data/netflix_titles.csv', 10, 'release_year')
 print(result_counts)
 """
+ #Code to demonstrate Machine Learning
+diabetes_data =  create_dateframe('/home/mukul/PycharmProjects/UCDAssement/data/diabetes.csv')
+#print(diabetes_data.head())
+#print(diabetes_data.info())
+#print(diabetes_data.describe())
+#From above analysis it's found tha there are some missing values and some outliers.
+
+#Replace all missing values with NaN
+diabetes_data[['Glucose','BloodPressure','SkinThickness','Insulin', 'BMI']] = diabetes_data[['Glucose','BloodPressure','SkinThickness','Insulin', 'BMI']].replace(0,np.NaN)
+#print(diabetes_data.describe())
+
+total_mising = diabetes_data.isnull().sum().sort_values(ascending=False)
+#print(total_mising)
+
+#diabetes_data.hist(figsize= (20,20))
+#plt.show()
+
+#Replace NaN values of columns as per distribution
+diabetes_data['Glucose'].fillna(diabetes_data['Glucose'].mean(), inplace=True)
+diabetes_data['BloodPressure'].fillna(diabetes_data['BloodPressure'].mean(), inplace=True)
+diabetes_data['SkinThickness'].fillna(diabetes_data['SkinThickness'].mean(), inplace=True)
+diabetes_data['Insulin'].fillna(diabetes_data['Insulin'].median(), inplace=True)
+diabetes_data['BMI'].fillna(diabetes_data['BMI'].median(), inplace=True)
+
+new_missing = diabetes_data.isnull().sum().sort_values(ascending=False)
+#print('Check if there is any missing data after Imputing')
+#print(new_missing)
+
+# Code to draw a plot and check if there are any corelated values in dataset
+#plot_corr(diabetes_data)
+#plt.show()
+
+X_train, X_test, y_train, y_test = train_test_split(diabetes_data,diabetes_data['Outcome'], test_size=0.30, random_state=25)
+neighbors = np.arange(1,40)
+test_scores = np.empty(len(neighbors))
+train_scores = np.empty(len(neighbors))
+
+for i, k in enumerate(neighbors):
+    knn = KNeighborsClassifier(n_neighbors = k)
+    knn.fit(X_train, y_train)
+    train_scores[i] = knn.score(X_train, y_train)
+    test_scores[i] = knn.score(X_test, y_test)
+
+plt.title('k-NN: Varying Number of Neighbors')
+plt.plot(neighbors, test_scores, label = 'Testing Accuracy')
+plt.plot(neighbors, train_scores, label = 'Training Accuracy')
+plt.legend()
+plt.xlabel('Number of Neighbors')
+plt.ylabel('Accuracy')
+#plt.show()
+
+#From Above plot we can conclude that the best result is obtained at k=14
+#Train the model with best value of k
+knn = KNeighborsClassifier(n_neighbors = 14)
+knn.fit(X_train, y_train)
+print(knn.score(X_test, y_test))
 
