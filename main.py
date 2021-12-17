@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import requests
 import seaborn as sns
+import re
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
@@ -67,6 +68,7 @@ def plot_corr(df):
 # Code to demenstorate loading data from csv file
 df_netflix = create_dateframe('/home/mukul/PycharmProjects/UCDAssement/data/netflix_titles.csv')
 df_amazon = create_dateframe('/home/mukul/PycharmProjects/UCDAssement/data/amazon_prime_titles.csv')
+
 # Code to demonstrate basic operations on pandas dataframe like find missing & duplicate
 """
 print(df_netflix.info())
@@ -113,8 +115,22 @@ for i in movie_list:
 result_counts = count_entries('./data/netflix_titles.csv', 10, 'release_year')
 print(result_counts)
 """
-# Code to demonstrate Machine Learning
 
+# Code to demonstrate regular expression in python
+"""
+df_tweets = create_dateframe('/home/mukul/PycharmProjects/UCDAssement/data/Tweets.csv')
+# print(df_tweets.head(5))
+hash_tags = []
+regex = r"#\b\w\w+\b"
+for i in df_tweets['text']:
+    word = re.findall(regex, i)
+    if len(word) > 0:
+        hash_tags.append(word)
+print(hash_tags)
+"""
+
+# Code to demonstrate Machine Learning
+"""
 diabetes_data = create_dateframe('/home/mukul/PycharmProjects/UCDAssement/data/diabetes.csv')
 # print(diabetes_data.head())
 # print(diabetes_data.info())
@@ -187,4 +203,4 @@ print('Best Params :- ', end='')
 print(knn_cv.best_params_)
 print('Best Score :- ', end='' )
 print(knn_cv.best_score_)
-
+"""
