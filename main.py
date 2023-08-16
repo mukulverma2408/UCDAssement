@@ -116,7 +116,7 @@ result_counts = count_entries('./data/netflix_titles.csv', 10, 'release_year')
 print(result_counts)
 """
 
-# Code to demonstrate regular expression in python
+# Code to demonstrate regular expression in python, Extracting all hash tags from Tweets
 """
 df_tweets = create_dateframe('/home/mukul/PycharmProjects/UCDAssement/data/Tweets.csv')
 # print(df_tweets.head(5))
